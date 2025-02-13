@@ -1,4 +1,4 @@
-CFLAGS = -m32 -fno-stack-protector -fno-builtin
+CFLAGS = -m32 -ffreestanding -fno-stack-protector -fno-builtin -g
 
 all: clean kernel bootloader iso
 
@@ -11,6 +11,7 @@ kernel:
 	gcc $(CFLAGS) -c src/gdt.c -o gdt.o
 	gcc $(CFLAGS) -c src/util.c -o util.o
 	gcc $(CFLAGS) -c src/interrupts/idt.c -o idt.o
+	gcc $(CFLAGS) -c src/timer.c -o timer.o
 
 bootloader:
 	nasm -f elf32 src/boot.s -o boot.o
@@ -18,7 +19,7 @@ bootloader:
 	nasm -f elf32 src/interrupts/idt.s -o idts.o
 
 iso:
-	ld -m elf_i386 -T linker.ld -o kernel boot.o kernel.o vga.o gdt.o gdts.o util.o idt.o idts.o
+	ld -m elf_i386 -T linker.ld -o kernel boot.o kernel.o vga.o gdt.o gdts.o util.o idt.o idts.o timer.o
 	mv kernel mOS/boot/kernel
 	grub-mkrescue -o kernel.iso mOS/
 	rm *.o
