@@ -1,6 +1,7 @@
 #include "interrupts/idt.h"
 #include "vga.h"
 #include "gdt.h"
+#include "stdint.h"
 
 void kmain(void);
 
@@ -9,6 +10,6 @@ void kmain(void) {
 	print("MasterOS v0.5.9 Delta (GRUB Migration)\r\n");
 	initGDT();
 	print("GDT & TSS is working!\r\n");
-	initIDT();
-	print(1/0);
+	// initTimer();
+	for(;;);
 }
